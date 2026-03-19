@@ -5,12 +5,13 @@ A custom status line configuration for [Claude Code](https://claude.ai/code) tha
 ## What it shows
 
 ```
-[Opus] Context: 12% | Tokens: 48350
+[Opus] Context: 12% | Tokens: 48350 | Cost: $0.42
 ```
 
 - **Model name** — which Claude model you're using (Opus, Sonnet, Haiku, etc.)
 - **Context usage** — percentage of the context window used
 - **Token count** — total input + output tokens consumed in the session
+- **Cost** — running session cost in USD
 
 ## Installation
 
@@ -22,7 +23,7 @@ Add the following to your `~/.claude/settings.json`:
 {
   "statusLine": {
     "type": "command",
-    "command": "jq -r '\"[\\(.model.display_name // \"Unknown\")] Context: \\((.context_window.used_percentage // 0) | floor)% | Tokens: \\(((.context_window.total_input_tokens // 0) + (.context_window.total_output_tokens // 0)))\"'"
+    "command": "jq -r '\"[\\(.model.display_name // \"Unknown\")] Context: \\((.context_window.used_percentage // 0) | floor)% | Tokens: \\(((.context_window.total_input_tokens // 0) + (.context_window.total_output_tokens // 0))) | Cost: $\\((.cost.total_cost_usd // 0) | . * 100 | round | . / 100)\"'"
   }
 }
 ```
